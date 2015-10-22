@@ -48,6 +48,9 @@ class Obit(object):
             created_at = date.today()
         self.created_at = created_at
 
+        self.inserted = False
+        self.updated = False
+
     def __str__(self):
         return "<Obit Name: {}\nAd#: {}\nPost Date: {}\nImages: {}\nSiicode: {}>" \
             .format(self.full_name, self.ad_number, self.created_at, self.images, self.siicode)
@@ -83,7 +86,7 @@ class Obit(object):
 
     def insert(self, connection):
         """ Insert new obituary into database """
-        print("Inserting obit")
+
         with connection.cursor() as cursor:
             sql = """INSERT INTO `death_notices`
             (`fname`, `btext`, `bdate`, `image`, `siicode`, `adnum`, `subclass`,
@@ -93,14 +96,14 @@ class Obit(object):
 
         connection.commit()
 
+        self.inserted = True
+
     def update(self, connection, record_id=None):
         """ Update an already existing obit in database """
         if record_id is None and self.record_id is None:
             raise Exception("To update an obit, you must supply its corresponding recordID")
         if record_id is None:
             record_id = self.record_id
-
-        print("Updating obit")
 
         with connection.cursor() as cursor:
             sql = """UPDATE `death_notices`
@@ -113,6 +116,8 @@ class Obit(object):
             cursor.execute(sql, params)
 
         connection.commit()
+
+        self.updated = True
 
 def parse_obits(fname, date=None):
     tree = ET.parse(fname)
@@ -186,12 +191,21 @@ if __name__ == '__main__':
         _date = sys.argv[2]
         _date = datetime.strptime(_date, '%Y-%m-%d').date()
 
+    inserted = 0
+    updated = 0
     obits = parse_obits(fname, _date)
     for obit in obits:
+        obit.save(connection)
         print(obit)
 
-        obit.save(connection)
+        if obit.inserted:
+            inserted += 1
+        elif obit.updated:
+            updated += 1
 
         print('-' * 50)
+
+    print("Inserted: " + str(inserted))
+    print("Updated: " + str(updated))
     #connection.commit()
 
