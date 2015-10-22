@@ -1,3 +1,6 @@
 feeds
 env.sh
 death_notice.sql
+__pycache__
+*.swp
+*.log
