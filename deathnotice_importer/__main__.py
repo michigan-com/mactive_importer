@@ -41,31 +41,30 @@ if __name__ == '__main__':
     dest_img_dir = os.path.join(args.dest, str(year), str(month))
     src_img_dir = os.path.dirname(fname)
     input_date = args.date
-    print(args)
 
-    # if input_date:
-    #     _date = input_date
-    #     _date = datetime.strptime(_date, '%Y-%m-%d').date()
+    if input_date:
+        _date = input_date
+        _date = datetime.strptime(_date, '%Y-%m-%d').date()
 
-    # if not os.path.exists(dest_img_dir):
-    #     os.makedirs(dest_img_dir)
+    if not os.path.exists(dest_img_dir):
+        os.makedirs(dest_img_dir)
 
-    # inserted = 0
-    # updated = 0
-    # obits = parse_obits(fname, icons, _date)
-    # for obit in obits:
-    #     obit.save(connection)
-    #     obit.copy_images(src_img_dir, dest_img_dir)
-    #     print(obit)
+    inserted = 0
+    updated = 0
+    obits = parse_obits(fname, icons, _date)
+    for obit in obits:
+        obit.save(connection)
+        obit.copy_images(src_img_dir, dest_img_dir)
+        print(obit)
 
-    #     if obit.inserted:
-    #         inserted += 1
-    #     elif obit.updated:
-    #         updated += 1
+        if obit.inserted:
+            inserted += 1
+        elif obit.updated:
+            updated += 1
 
-    #     print('-' * 50)
+        print('-' * 50)
 
-    # print("Inserted: " + str(inserted))
-    # print("Updated: " + str(updated))
-    # connection.commit()
+    print("Inserted: " + str(inserted))
+    print("Updated: " + str(updated))
+    connection.commit()
 
