@@ -11,8 +11,10 @@ def send_email(msg):
     msg["Subject"] = "Death Notice Feed for {}-{}-{}".format(now.year, now.month, now.day)
     try:
         p = Popen(["/usr/sbin/sendmail", 'neurosnap@gmail.com', 'mvarano@michigan.com', 'rwilliams@michigan.com'], stdin=PIPE)
-        p.communicate(msg.as_string())
+        p.communicate(bytes(msg.as_string(), 'utf-8'))
         print("Successfully sent the mail\n ")
-    except:
-        print("Error sending email\n ")
+    except Exception as e:
+        print("Error sending email...")
+        print(e)
         print(msg.as_string())
+
