@@ -41,13 +41,13 @@ Run
 To parse and save obits for `today`
 
 ```
-python deathnotice_importer.py <deathnotices_xml_file>
+python -m deathnotice_importer <deathnotices_xml_file>
 ```
 
 To parse and save obits for a different date:
 
 ```
-python deathnotice_importer.py <deathnotices_xml_file> <date in format: YEAR-MONTH-DAY, e.g.: 2015-10-20>
+python -m deathnotice_importer <deathnotices_xml_file> <date in format: YEAR-MONTH-DAY, e.g.: 2015-10-20>
 ```
 
 Tips
