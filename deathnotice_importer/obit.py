@@ -69,10 +69,11 @@ class Obit(object):
                 print('Img not found {}'.format(src))
                 continue
 
-            copy(src, dest)
-            if os.path.exists(dest):
+            try:
+                copy(src, dest)
                 print('Copied from {} to {}'.format(src, dest))
-            else:
+            except Exception as e:
+                print(e)
                 print('Failed to copy to {}'.format(dest))
 
     def insert(self, connection):

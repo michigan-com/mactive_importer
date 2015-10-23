@@ -7,6 +7,7 @@ from argparse import ArgumentParser
 import pymysql
 
 from .parse_xml import parse_obits
+from .send_email import send_email
 
 DEST_IMG_DIR = '/cust/docs/http-detroitnewspapers/mideathnotices/assets/images/dnimages'
 SRC_IMG_DIR = '/cust/scripts/death_notices/feeds'
@@ -64,7 +65,7 @@ if __name__ == '__main__':
 
         print('-' * 50)
 
-    print("Inserted: " + str(inserted))
-    print("Updated: " + str(updated))
     connection.commit()
+
+    send_email("Inserted: {}\nUpdated: {}\n".format(str(inserted), str(updated)))
 
