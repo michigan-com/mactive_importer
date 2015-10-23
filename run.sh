@@ -1,5 +1,5 @@
 #!/bin/bash
 
 source ./env.sh
-workon deathnotices
+source $WORKON_HOME/deathnotices/bin/activate
 python -m deathnotice_importer -f /home/ebower/deathnotices/feeds/deathnotices.txt
