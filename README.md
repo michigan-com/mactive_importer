@@ -41,19 +41,19 @@ Run
 To parse and save obits for `today`
 
 ```
-python -m deathnotice_importer <deathnotices_xml_file>
+python -m deathnotice_importer -f <path to xml file>
 ```
 
 To parse and save obits for a different date:
 
 ```
-python -m deathnotice_importer <deathnotices_xml_file> <dest img dir>
+python -m deathnotice_importer -f <path to xml file> -d <path to img dir>
 ```
 
 To parse and save to a specific folder
 
 ```
-python -m deathnotice_impoter <deathnotices_xml_file> <dest img dir> <date in format: YEAR-MONTH-DAY, e.g.: 2015-10-20> 
+python -m deathnotice_impoter -f <path to xml file> -d <path to img dir>  --date <date in format: YEAR-MONTH-DAY, e.g.: 2015-10-20> 
 ```
 
 Tips

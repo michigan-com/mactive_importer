@@ -2,12 +2,19 @@
 import sys
 import os
 from datetime import date, datetime
+from argparse import ArgumentParser
+
 import pymysql
 
 from .parse_xml import parse_obits
 
 DEST_IMG_DIR = '/cust/docs/http-detroitnewspapers/mideathnotices/assets/images/dnimages'
 SRC_IMG_DIR = '/cust/scripts/death_notices/feeds'
+
+parser = ArgumentParser(description='Parse Mactive Deathnotice feeds')
+parser.add_argument('-f', dest='fname', help='Path to obit XML file to read from', required=True)
+parser.add_argument('-d', dest='dest', help='Path to destination directory for images', default=DEST_IMG_DIR)
+parser.add_argument('--date', dest='date', help='YYYY-MM-DD date string, specifying the specific day to process', default="")
 
 if __name__ == '__main__':
     _date = date.today()
@@ -29,38 +36,36 @@ if __name__ == '__main__':
         cursorclass=pymysql.cursors.DictCursor,
     )
 
-    if len(sys.argv) <= 1:
-        raise Exception("First argument to script must be the location of the XML file")
-
-    fname = sys.argv[1]
-    dest_img_dir = DEST_IMG_DIR
+    args = parser.parse_args()
+    fname = args.fname
+    dest_img_dir = os.path.join(args.dest, str(year), str(month))
     src_img_dir = os.path.dirname(fname)
-    if len(sys.argv) > 2: 
-        dest_img_dir = sys.argv[2]
-    if len(sys.argv) > 3:
-        _date = sys.argv[3]
-        _date = datetime.strptime(_date, '%Y-%m-%d').date()
+    input_date = args.date
+    print(args)
 
-    dest_img_dir = os.path.join(dest_img_dir, str(year), str(month))
-    if not os.path.exists(dest_img_dir):
-        os.makedirs(dest_img_dir)
+    # if input_date:
+    #     _date = input_date
+    #     _date = datetime.strptime(_date, '%Y-%m-%d').date()
 
-    inserted = 0
-    updated = 0
-    obits = parse_obits(fname, icons, _date)
-    for obit in obits:
-        obit.save(connection)
-        obit.copy_images(src_img_dir, dest_img_dir)
-        print(obit)
+    # if not os.path.exists(dest_img_dir):
+    #     os.makedirs(dest_img_dir)
 
-        if obit.inserted:
-            inserted += 1
-        elif obit.updated:
-            updated += 1
+    # inserted = 0
+    # updated = 0
+    # obits = parse_obits(fname, icons, _date)
+    # for obit in obits:
+    #     obit.save(connection)
+    #     obit.copy_images(src_img_dir, dest_img_dir)
+    #     print(obit)
 
-        print('-' * 50)
+    #     if obit.inserted:
+    #         inserted += 1
+    #     elif obit.updated:
+    #         updated += 1
 
-    print("Inserted: " + str(inserted))
-    print("Updated: " + str(updated))
-    #connection.commit()
+    #     print('-' * 50)
+
+    # print("Inserted: " + str(inserted))
+    # print("Updated: " + str(updated))
+    # connection.commit()
 
