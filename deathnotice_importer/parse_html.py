@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from html.parser import HTMLParser
 
-class MLStripper(HTMLParser):
+class CustomHTMLParser(HTMLParser):
     def __init__(self):
         self.reset()
         self.strict = False
@@ -26,7 +26,7 @@ class MLStripper(HTMLParser):
     def get_data(self):
         return ''.join(self.fed), self.images
 
-def strip_tags(html):
-    s = MLStripper()
+def parse_content(html):
+    s = CustomHTMLParser()
     s.feed(html)
     return s.get_data()
