@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+from shutil import copy
 
 class Obit(object):
     """ Data container for each obituary in the XML file. """
@@ -57,6 +59,21 @@ class Obit(object):
             self.update(connection)
         else:
             self.insert(connection)
+
+    def copy_images(self, src_dir, dest_dir):
+        for img in self.images:
+            src = os.path.join(src_dir, img)
+            dest = os.path.join(dest_dir, img)
+
+            if not os.path.exists(src):
+                print('Img not found {}'.format(src))
+                continue
+
+            copy(src, dest)
+            if os.path.exists(dest):
+                print('Copied from {} to {}'.format(src, dest))
+            else:
+                print('Failed to copy to {}'.format(dest))
 
     def insert(self, connection):
         """ Insert new obituary into database """

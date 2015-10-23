@@ -24,7 +24,7 @@ mysqldump -h <db_ip> -u <user> -p death_notices > death_notice.sql
 Restore copy, can use `schema.sql` if you want
 
 ```
-mysqldump -h localhost -u <user> -p death_notices < schema.sql
+mysql -h localhost -u <user> -p death_notices < schema.sql
 ```
 
 Environment Variables
@@ -47,7 +47,13 @@ python -m deathnotice_importer <deathnotices_xml_file>
 To parse and save obits for a different date:
 
 ```
-python -m deathnotice_importer <deathnotices_xml_file> <date in format: YEAR-MONTH-DAY, e.g.: 2015-10-20>
+python -m deathnotice_importer <deathnotices_xml_file> <dest img dir>
+```
+
+To parse and save to a specific folder
+
+```
+python -m deathnotice_impoter <deathnotices_xml_file> <dest img dir> <date in format: YEAR-MONTH-DAY, e.g.: 2015-10-20> 
 ```
 
 Tips
