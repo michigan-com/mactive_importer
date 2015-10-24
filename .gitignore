@@ -5,4 +5,5 @@ death_notice.sql
 __pycache__
 *.swp
 *.log
+*.pyc
 deathnotices.txt
