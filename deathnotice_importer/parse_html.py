@@ -2,16 +2,16 @@
 from html.parser import HTMLParser
 
 class CustomHTMLParser(HTMLParser):
-    def __init__(self):
+    def __init__(self, first_name, last_name):
         self.reset()
         self.strict = False
         self.convert_charrefs= True
         self.fed = []
         self.images = []
-        self.last_tag = ''
+        self.first_name = first_name
+        self.last_name = last_name
 
     def handle_starttag(self, tag, attrs):
-        self.last_tag = tag
         if tag == 'imgp' or tag == 'img':
             for attr in attrs:
                 if attr[0] != 'src':
@@ -23,16 +23,14 @@ class CustomHTMLParser(HTMLParser):
     def handle_data(self, d):
         if d == '\n':
             return
-        if self.last_tag == 'font':
-            d = '{} '.format(d.strip())
+        if d.lower() == self.last_name.lower():
+            d = "{} ".format(d)
         self.fed.append(d)
-
-        self.last_tag = ''
 
     def get_data(self):
         return ''.join(self.fed), self.images
 
-def parse_content(html):
-    s = CustomHTMLParser()
+def parse_content(html, first_name, last_name):
+    s = CustomHTMLParser(first_name, last_name)
     s.feed(html)
     return s.get_data()

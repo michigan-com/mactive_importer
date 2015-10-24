@@ -32,7 +32,7 @@ def parse_obits(fname, icons, date=None):
         ad_content_el = ad_type_el.find('ad-content')
         ad_content = ad_content_el.text.strip()
 
-        text, images = parse_content(ad_content_el.text)
+        text, images = parse_content(ad_content_el.text, first_name, last_name)
 
         siicode = ""
         final_images = []
