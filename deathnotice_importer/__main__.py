@@ -18,7 +18,7 @@ parser.add_argument('-d', dest='dest', help='Path to destination directory for i
 parser.add_argument('--date', dest='date', help='YYYY-MM-DD date string, specifying the specific day to process', default="")
 
 if __name__ == '__main__':
-    _date = date.today()
+    _date = datetime.utcnow().date()
     year = _date.year
     month = _date.month
 
