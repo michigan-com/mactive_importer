@@ -52,7 +52,8 @@ if __name__ == '__main__':
 
     inserted = 0
     updated = 0
-    obits = parse_obits(fname, icons, _date)
+    tree = ET.parse(fname)
+    obits = parse_obits(tree.getRoot(), icons, _date)
     for obit in obits:
         obit.save(connection)
         obit.copy_images(src_img_dir, dest_img_dir)
