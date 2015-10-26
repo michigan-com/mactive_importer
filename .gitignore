@@ -1,3 +1,4 @@
+*.pyc
 feeds
 env.sh
 prod_env.sh
