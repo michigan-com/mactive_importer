@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from shutil import copy
+from datetime import date
 
 class Obit(object):
     """ Data container for each obituary in the XML file. """
