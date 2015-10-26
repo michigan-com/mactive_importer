@@ -1,10 +1,12 @@
 # -*- coding utf-8 -*-
+import re
 import unittest
+import random
 from xml.etree.ElementTree import XML
 from datetime import date
 
 from deathnotice_importer.parse_html import parse_content
-from deathnotice_importer.parse_xml import parse_obits
+from deathnotice_importer.parse_xml import parse_obits, sorted_nicely
 
 xml_feed_format = '''<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <web-export>
@@ -36,6 +38,11 @@ xml_obit_format = '''
     </ad-type>
 </pub-code>
 '''
+
+# General format of <ad-content> tag
+ad_content_format = '<font>{first_name}</font><font>{last_name}</font><font>{content}</font>'
+
+img_regex = re.compile('<img(p)?[^\>]*>')
 
 class TestParse(unittest.TestCase):
     defaults = {
@@ -77,3 +84,52 @@ class TestParse(unittest.TestCase):
             self.assertEqual(obit.__getattribute__(key), self.defaults[key],
                     'Attribute {} doesn\'t match up'.format(key))
 
+
+    def test_parse_content(self):
+        first_name = self.defaults['first_name']
+        last_name = self.defaults['last_name']
+        ad_content = self.defaults['ad_content']
+        content = ad_content_format.format(first_name=first_name,
+                last_name=last_name, content=ad_content)
+
+        fed, images = parse_content(content, first_name, last_name)
+
+        # This is what we expect fed to be
+        expected_fed = ''.join([first_name, '{} '.format(last_name), ad_content])
+        self.assertEqual(fed, expected_fed, 'invalid fed')
+
+        self.assertEqual(len(images), 0, 'Should not be any images')
+
+    def test_parse_content_images(self):
+        img_names = ['123.jpg', '456.png']
+        first_name = self.defaults['first_name']
+        last_name = self.defaults['last_name']
+        ad_content = 'This is the add content. <img src="{}"> There\'s one image tag. Here\'s another <imgp src="{}">'.format(*img_names)
+        content = ad_content_format.format(first_name=first_name,
+                last_name=last_name, content=ad_content)
+
+        fed, images = parse_content(content, first_name, last_name)
+
+        self.assertEqual(len(images), len(img_names), 'Incorrect number of imgs')
+        for img in images:
+            self.assertTrue(img in img_names, 'Img {} not found'.format(img))
+
+        expected_fed = ''.join([first_name, '{} '.format(last_name), img_regex.sub('', ad_content)])
+        self.assertEqual(fed, expected_fed, 'invalid fed')
+
+    def test_sort_nicely(self):
+        imgs = []
+        for i in range(0, 20):
+            file_extension = 'png' if i % 2 else 'jpg'
+            imgs.append('{}.{}'.format(random.randint(0, 10000), file_extension))
+
+        sorted = sorted_nicely(imgs)
+
+        last = None
+        for img in sorted:
+            num = int(re.sub('\D', '', img))
+            if last is None:
+                last = num
+                continue
+
+            self.assertTrue(num > last, 'Incorrectly sorted: {} !> {}'.format(num, last))
