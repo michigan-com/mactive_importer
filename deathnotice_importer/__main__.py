@@ -2,6 +2,7 @@
 import sys
 import os
 from datetime import date, datetime
+import xml.etree.ElementTree as ET
 from argparse import ArgumentParser
 
 import pymysql
@@ -56,7 +57,7 @@ if __name__ == '__main__':
     img_fail = 0
 
     tree = ET.parse(fname)
-    obits = parse_obits(tree.getRoot(), icons, _date)
+    obits = parse_obits(tree.getroot(), icons, _date)
     for obit in obits:
         obit.save(connection)
         obit.copy_images(src_img_dir, dest_img_dir)
@@ -66,7 +67,8 @@ if __name__ == '__main__':
             inserted += 1
         elif obit.updated:
             updated += 1
-        elif obit.img_copy == 1:
+
+        if obit.img_copy == 1:
             img_success += 1
         elif obit.img_copy == -1:
             img_fail += 1
@@ -75,11 +77,13 @@ if __name__ == '__main__':
 
     connection.commit()
 
-    send_email("""Inserted: {}\n
+    msg = """Inserted: {}\n
     Updated: {}\n
     Img Copy Success: {}\n
     Img Copy Fail: {}""".format(
         str(inserted), str(updated),
         str(img_success), str(img_fail)
-    ))
+    )
+
+    send_email(msg)
 
