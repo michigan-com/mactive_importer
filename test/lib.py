@@ -5,8 +5,7 @@ dest_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data/dest_d
 
 def get_test_images(include_path=False):
     """ Get an array of the test images located in data/feeds. Only gets
-        png and jpg atm
-    """
+        png and jpg atm """
 
     photo_regex = "\.(jpg|png)$"
     images = []
