@@ -9,6 +9,7 @@ import pymysql
 
 from .parse_xml import parse_obits
 from .send_email import send_email
+from .db import connect
 
 DEST_IMG_DIR = '/cust/docs/http-detroitnewspapers/mideathnotices/assets/images/dnimages'
 SRC_IMG_DIR = '/cust/scripts/death_notices/feeds'
@@ -30,13 +31,7 @@ if __name__ == '__main__':
     with open('dn_icons.txt', 'r') as fp:
         icons = fp.read().splitlines()
 
-    connection = pymysql.connect(
-        host=os.getenv('DN_HOST', 'localhost'),
-        user=os.getenv('DN_USER', ''),
-        password=os.getenv('DN_PASS', ''),
-        db=os.getenv('DN_DB', 'death_notices'),
-        cursorclass=pymysql.cursors.DictCursor,
-    )
+    connection = connect()
 
     args = parser.parse_args()
     fname = args.fname

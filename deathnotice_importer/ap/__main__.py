@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """ Primary entry point for grabbing Associated Press obits. """
-
+from datetime import datetime
 import xml.etree.ElementTree as ET
+
 import requests
+import pymysql
 
 def get_xml(url="http://hosted.ap.org/lineups/OBIT-rss_2.0.xml?SITE=MIDTN"):
     resp = requests.get(url)
@@ -29,8 +31,10 @@ if __name__ == '__main__':
         desc = desc_el.text.strip()
         print(desc)
 
-        #date = obit.find('date').text.strip()
-        #print(date)
+        str_date = obit.find('pubDate').text.strip()
+        #Tue, 27 Oct 2015 20:26:34 GMT
+        date = datetime.strptime(str_date, "%a, %d %b %Y %H:%M:%S %Z").date()
+        print(str(date))
 
         print('----')
 
