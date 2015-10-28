@@ -23,6 +23,7 @@ class Obit(object):
 
         self.inserted = False
         self.updated = False
+        self.img_copy = 0
 
     def __str__(self):
         return "<Obit Name: {}\nAd#: {}\nPost Date: {}\nImages: {}\nSiicode: {}>" \
@@ -61,22 +62,6 @@ class Obit(object):
         else:
             self.insert(connection)
 
-    def copy_images(self, src_dir, dest_dir):
-        for img in self.images:
-            src = os.path.join(src_dir, img)
-            dest = os.path.join(dest_dir, img)
-
-            if not os.path.exists(src):
-                print('Img not found {}'.format(src))
-                continue
-
-            try:
-                copy(src, dest)
-                print('Copied from {} to {}'.format(src, dest))
-            except Exception as e:
-                print(e)
-                print('Failed to copy to {}'.format(dest))
-
     def insert(self, connection):
         """ Insert new obituary into database """
 
@@ -111,4 +96,23 @@ class Obit(object):
         connection.commit()
 
         self.updated = True
+
+    def copy_images(self, src_dir, dest_dir):
+        for img in self.images:
+            src = os.path.join(src_dir, img)
+            dest = os.path.join(dest_dir, img)
+
+            if not os.path.exists(src):
+                print('Img not found {}'.format(src))
+                continue
+
+            try:
+                copy(src, dest)
+                self.img_copy = 1
+                print('Copied from {} to {}'.format(src, dest))
+            except Exception as e:
+                self.img_copy = -1
+                print(e)
+                print('Failed to copy to {}'.format(dest))
+
 

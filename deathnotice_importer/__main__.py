@@ -52,6 +52,9 @@ if __name__ == '__main__':
 
     inserted = 0
     updated = 0
+    img_success = 0
+    img_fail = 0
+
     tree = ET.parse(fname)
     obits = parse_obits(tree.getRoot(), icons, _date)
     for obit in obits:
@@ -63,10 +66,20 @@ if __name__ == '__main__':
             inserted += 1
         elif obit.updated:
             updated += 1
+        elif obit.img_copy == 1:
+            img_success += 1
+        elif obit.img_copy == -1:
+            img_fail += 1
 
         print('-' * 50)
 
     connection.commit()
 
-    send_email("Inserted: {}\nUpdated: {}\n".format(str(inserted), str(updated)))
+    send_email("""Inserted: {}\n
+    Updated: {}\n
+    Img Copy Success: {}\n
+    Img Copy Fail: {}""".format(
+        str(inserted), str(updated),
+        str(img_success), str(img_fail)
+    ))
 
