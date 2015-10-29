@@ -110,7 +110,7 @@ class Obit(object):
 
         for img in self.images:
             src = os.path.join(src_dir, img)
-            dest = os.path.join(dest_dir, img)
+            dest = "/".join(dest_dir, img)
 
             if not os.path.exists(src):
                 print('Img not found {}'.format(src))
