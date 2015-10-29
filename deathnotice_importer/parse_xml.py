@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import re
 import xml.etree.ElementTree as ET
 
@@ -48,7 +49,7 @@ def get_obit(pub_code, icons=[], date=None):
         final_images.append(image)
 
     images = sorted_nicely(final_images)
-    return Obit(first_name, last_name, ad_number, publication, text, images, siicode, date, subclass_code)
+    return Obit(first_name, last_name, ad_number, publication, text, images, siicode, date, subclass_code, use_s3=os.getenv('USE_S3', False))
 
 def sorted_nicely(_list):
     """ Sort the given iterable in the way that humans expect."""

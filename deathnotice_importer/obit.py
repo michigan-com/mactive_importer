@@ -3,10 +3,12 @@ import os
 from shutil import copy
 from datetime import date
 
+from . import s3
+
 class Obit(object):
     """ Data container for each obituary in the XML file. """
     def __init__(self, first_name, last_name, ad_number,  publication,
-            text, images, siicode, created_at='', subclass_code='', record_id=None):
+            text, images, siicode, created_at='', subclass_code='', record_id=None, use_s3=False):
         self.record_id = record_id
         self.first_name = first_name
         self.last_name = last_name
@@ -20,6 +22,8 @@ class Obit(object):
         if not created_at:
             created_at = date.today()
         self.created_at = created_at
+
+        self.use_s3 = use_s3
 
         self.inserted = False
         self.updated = False
@@ -98,6 +102,12 @@ class Obit(object):
         self.updated = True
 
     def copy_images(self, src_dir, dest_dir):
+        connection = None
+        bucket = None
+        if self.use_s3:
+            connection = s3.connect()
+            bucket = s3.bucket(connection)
+
         for img in self.images:
             src = os.path.join(src_dir, img)
             dest = os.path.join(dest_dir, img)
@@ -106,13 +116,23 @@ class Obit(object):
                 print('Img not found {}'.format(src))
                 continue
 
-            try:
-                copy(src, dest)
-                self.img_copy = 1
-                print('Copied from {} to {}'.format(src, dest))
-            except Exception as e:
-                self.img_copy = -1
-                print(e)
-                print('Failed to copy to {}'.format(dest))
+            if self.use_s3:
+                try:
+                    self.img_copy = 1
+                    s3.upload_file(bucket, src, dest)
+                    print('[S3] Copied from local {} to S3 michigan-static/{}'.format(src, dest))
+                except Exception as e:
+                    self.img_copy = -1
+                    print(e)
+                    print('[S3] Failed to copy to S3 michigan-static/{}'.format(src, dest))
+            else:
+                try:
+                    copy(src, dest)
+                    self.img_copy = 1
+                    print('Copied from {} to {}'.format(src, dest))
+                except Exception as e:
+                    self.img_copy = -1
+                    print(e)
+                    print('Failed to copy to {}'.format(dest))
 
 
