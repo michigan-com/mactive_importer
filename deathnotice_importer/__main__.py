@@ -45,7 +45,7 @@ if __name__ == '__main__':
     year = _date.year
     month = _date.month
 
-    dest_img_dir = "/".join(args.dest, str(year), str(month))
+    dest_img_dir = "/".join([args.dest, str(year), str(month)])
     print("YEAR: " + str(year), "MONTH: " + str(month))
 
     #if not os.path.exists(dest_img_dir):
