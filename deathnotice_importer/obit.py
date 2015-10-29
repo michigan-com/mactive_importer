@@ -94,7 +94,6 @@ class Obit(object):
                 `publication`=%s, `iss3`=%s
             WHERE recordID=%s"""
             params = self.sql_params
-            print(params)
             params.append(record_id)
             cursor.execute(sql, params)
 

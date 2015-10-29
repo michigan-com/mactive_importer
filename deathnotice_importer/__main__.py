@@ -20,7 +20,6 @@ parser.add_argument('-d', dest='dest', help='Path to destination directory for i
 parser.add_argument('--date', dest='date', help='YYYY-MM-DD date string, specifying the specific day to process', default="")
 
 if __name__ == '__main__':
-    _date = datetime.utcnow().date()
     year = _date.year
     month = _date.month
 
@@ -39,6 +38,12 @@ if __name__ == '__main__':
     src_img_dir = os.path.dirname(fname)
     input_date = args.date
 
+    tree = ET.parse(fname)
+    root = tree.getroot()
+    run_date = root.find('web-export/rub-date').text.strip()
+    print(run_date)
+
+    _date = datetime.utcnow().date()
     if input_date:
         _date = input_date
         _date = datetime.strptime(_date, '%Y-%m-%d').date()
@@ -50,9 +55,6 @@ if __name__ == '__main__':
     updated = 0
     img_success = 0
     img_fail = 0
-
-    tree = ET.parse(fname)
-    root = tree.getroot()
 
     obits = parse_obits(root, icons, _date)
     for obit in obits:
