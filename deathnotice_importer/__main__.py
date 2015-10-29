@@ -20,11 +20,6 @@ parser.add_argument('-d', dest='dest', help='Path to destination directory for i
 parser.add_argument('--date', dest='date', help='YYYY-MM-DD date string, specifying the specific day to process', default="")
 
 if __name__ == '__main__':
-    year = _date.year
-    month = _date.month
-
-    print("YEAR: " + str(year), "MONTH: " + str(month))
-
     icons = []
     #TODO: turn this into a db table
     with open('dn_icons.txt', 'r') as fp:
@@ -34,19 +29,24 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     fname = args.fname
-    dest_img_dir = os.path.join(args.dest, str(year), str(month))
     src_img_dir = os.path.dirname(fname)
     input_date = args.date
 
     tree = ET.parse(fname)
     root = tree.getroot()
-    run_date = root.find('web-export/rub-date').text.strip()
-    print(run_date)
+    run_date = root.find('run-date').text.strip()
 
-    _date = datetime.utcnow().date()
+    _date = run_date #datetime.utcnow().date()
+    _date = datetime.strptime(_date, '%m/%d/%Y')
     if input_date:
         _date = input_date
         _date = datetime.strptime(_date, '%Y-%m-%d').date()
+
+    year = _date.year
+    month = _date.month
+
+    dest_img_dir = os.path.join(args.dest, str(year), str(month))
+    print("YEAR: " + str(year), "MONTH: " + str(month))
 
     if not os.path.exists(dest_img_dir):
         os.makedirs(dest_img_dir)
