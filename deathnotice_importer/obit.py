@@ -8,7 +8,7 @@ from . import s3
 class Obit(object):
     """ Data container for each obituary in the XML file. """
     def __init__(self, first_name, last_name, ad_number,  publication,
-            text, images, siicode, created_at='', subclass_code='', record_id=None, use_s3=False):
+            text, images, siicode, created_at='', subclass_code='', record_id=None, use_s3=0):
         self.record_id = record_id
         self.first_name = first_name
         self.last_name = last_name
@@ -23,7 +23,7 @@ class Obit(object):
             created_at = date.today()
         self.created_at = created_at
 
-        self.use_s3 = use_s3
+        self.use_s3 = int(use_s3)
 
         self.inserted = False
         self.updated = False
@@ -42,7 +42,7 @@ class Obit(object):
         return [
             self.full_name, self.text, str(self.created_at), self.image_str,
             self.siicode, self.ad_number, self.subclass_code, self.first_name,
-            self.last_name, self.publication,
+            self.last_name, self.publication, self.use_s3,
         ]
 
     def find(self, connection):
@@ -72,8 +72,8 @@ class Obit(object):
         with connection.cursor() as cursor:
             sql = """INSERT INTO `death_notices`
             (`fname`, `btext`, `bdate`, `image`, `siicode`, `adnum`, `subclass`,
-             `firstname`, `lastname`, `publication`)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+             `firstname`, `lastname`, `publication`, `iss3`)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
             cursor.execute(sql, self.sql_params)
 
         connection.commit()
@@ -91,9 +91,10 @@ class Obit(object):
             sql = """UPDATE `death_notices`
             SET `fname`=%s, `btext`=%s, `bdate`=%s, `image`=%s, `siicode`=%s,
                 `adnum`=%s, `subclass`=%s, `firstname`=%s, `lastname`=%s,
-                `publication`=%s
+                `publication`=%s, `iss3`=%s
             WHERE recordID=%s"""
             params = self.sql_params
+            print(params)
             params.append(record_id)
             cursor.execute(sql, params)
 
