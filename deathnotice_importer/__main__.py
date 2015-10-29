@@ -37,7 +37,7 @@ if __name__ == '__main__':
     run_date = root.find('run-date').text.strip()
 
     _date = run_date #datetime.utcnow().date()
-    _date = datetime.strptime(_date, '%m/%d/%Y')
+    _date = datetime.strptime(_date, '%m/%d/%Y').date()
     if input_date:
         _date = input_date
         _date = datetime.strptime(_date, '%Y-%m-%d').date()
