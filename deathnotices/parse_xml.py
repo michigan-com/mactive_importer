@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 
 from .parse_html import parse_content
 from .obit import Obit
-from .log import logger
+from ..log import logger
 
 def parse_obits(root, use_s3=False, icons=[] , date=None):
     run_date_el = root.find('run-date')

@@ -3,8 +3,8 @@ import os
 from shutil import copy
 from datetime import date
 
-from . import s3
-from .log import logger
+from .. import s3
+from ..log import logger
 
 class Obit(object):
     """ Data container for each obituary in the XML file. """

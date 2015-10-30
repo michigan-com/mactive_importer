@@ -5,8 +5,8 @@ import random
 from xml.etree.ElementTree import XML
 from datetime import date
 
-from deathnotice_importer.parse_html import parse_content
-from deathnotice_importer.parse_xml import parse_obits, sorted_nicely
+from ..parse_html import parse_content
+from ..parse_xml import parse_obits, sorted_nicely
 
 xml_feed_format = '''<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <web-export>
