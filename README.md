@@ -12,7 +12,7 @@ nosetest -s
 
 # Run
 
-## [Death Notices](https://github.com/michigan-com/mactive_importer/mactive_importer/tree/master/deathnotices)
+## [Death Notices](https://github.com/michigan-com/mactive_importer/tree/master/mactive_importer/deathnotices)
 ```
 python -m mactive_importer.deathnotices
 ```
