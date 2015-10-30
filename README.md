@@ -34,6 +34,8 @@ Environment Variables
 * DN\_DB : mySQL database name, default: 'death\_notices'
 * DN\_USER : mySQL user name, default: ''
 * DN\_PASS : mySQL user password, default: ''
+* AWS\_ACCESS\_KEY\_ID : AWS S3 access key
+* AWS\_SECRET\_ACCESS\_KEY : AWS Secret access key
 
 Run
 ---
@@ -54,6 +56,12 @@ To parse and save to a specific folder
 
 ```
 python -m deathnotice_impoter -f <path to xml file> -d <path to img dir>  --date <date in format: YEAR-MONTH-DAY, e.g.: 2015-10-20>
+```
+
+Send to S3
+
+```
+python -m deathnotice_importer --s3 -f <path to xml file> -d <path to img dir>
 ```
 
 Test
