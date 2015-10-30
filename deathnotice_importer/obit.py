@@ -4,11 +4,12 @@ from shutil import copy
 from datetime import date
 
 from . import s3
+from .log import logger
 
 class Obit(object):
     """ Data container for each obituary in the XML file. """
     def __init__(self, first_name, last_name, ad_number,  publication,
-            text, images, siicode, created_at='', subclass_code='', record_id=None, use_s3=0):
+            text, images, siicode, created_at='', subclass_code='', record_id=None, use_s3=False):
         self.record_id = record_id
         self.first_name = first_name
         self.last_name = last_name
@@ -23,7 +24,10 @@ class Obit(object):
             created_at = date.today()
         self.created_at = created_at
 
-        self.use_s3 = int(use_s3)
+        if use_s3:
+            self.use_s3 = 1
+        else:
+            self.use_s3 = 0
 
         self.inserted = False
         self.updated = False
@@ -113,26 +117,25 @@ class Obit(object):
             dest = "/".join([dest_dir, img])
 
             if not os.path.exists(src):
-                print('Img not found {}'.format(src))
+                logger.info('Img not found {}'.format(src))
                 continue
 
             if self.use_s3:
                 try:
                     self.img_copy = 1
                     s3.upload_file(bucket, src, dest)
-                    print('[S3] Copied from local {} to S3 michigan-static/{}'.format(src, dest))
+                    logger.info('[S3] Copied from local {} to S3 michigan-static/{}'.format(src, dest))
                 except Exception as e:
                     self.img_copy = -1
-                    print(e)
-                    print('[S3] Failed to copy to S3 michigan-static/{}'.format(src, dest))
+                    logger.info(e)
+                    logger.info('[S3] Failed to copy to S3 michigan-static/{}'.format(src, dest))
             else:
                 try:
                     copy(src, dest)
                     self.img_copy = 1
-                    print('Copied from {} to {}'.format(src, dest))
+                    logger.info('Copied from {} to {}'.format(src, dest))
                 except Exception as e:
                     self.img_copy = -1
-                    print(e)
-                    print('Failed to copy to {}'.format(dest))
-
+                    logger.info(e)
+                    logger.info('Failed to copy to {}'.format(dest))
 

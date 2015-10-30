@@ -8,8 +8,9 @@ from argparse import ArgumentParser
 import pymysql
 
 from .parse_xml import parse_obits
-from .send_email import send_email
+#from .send_email import send_email
 from .db import connect
+from .log import logger
 
 DEST_IMG_DIR = '/cust/docs/http-detroitnewspapers/mideathnotices/assets/images/dnimages'
 SRC_IMG_DIR = '/cust/scripts/death_notices/feeds'
@@ -18,6 +19,7 @@ parser = ArgumentParser(description='Parse Mactive Deathnotice feeds')
 parser.add_argument('-f', dest='fname', help='Path to obit XML file to read from', required=True)
 parser.add_argument('-d', dest='dest', help='Path to destination directory for images', default=DEST_IMG_DIR)
 parser.add_argument('--date', dest='date', help='YYYY-MM-DD date string, specifying the specific day to process', default="")
+parser.add_argument('--s3', dest='use_s3', help='Flag to attempt to upload to AWS S3', action='store_true', default=False)
 
 if __name__ == '__main__':
     icons = []
@@ -31,6 +33,7 @@ if __name__ == '__main__':
     fname = args.fname
     src_img_dir = os.path.dirname(fname)
     input_date = args.date
+    use_s3 = args.use_s3
 
     tree = ET.parse(fname)
     root = tree.getroot()
@@ -46,7 +49,6 @@ if __name__ == '__main__':
     month = _date.month
 
     dest_img_dir = "/".join([args.dest, str(year), str(month)])
-    print("YEAR: " + str(year), "MONTH: " + str(month))
 
     #if not os.path.exists(dest_img_dir):
     #    os.makedirs(dest_img_dir)
@@ -56,11 +58,11 @@ if __name__ == '__main__':
     img_success = 0
     img_fail = 0
 
-    obits = parse_obits(root, icons, _date)
+    obits = parse_obits(root, use_s3, icons, _date)
     for obit in obits:
         obit.save(connection)
         obit.copy_images(src_img_dir, dest_img_dir)
-        print(obit)
+        logger.info(obit)
 
         if obit.inserted:
             inserted += 1
@@ -72,8 +74,6 @@ if __name__ == '__main__':
         elif obit.img_copy == -1:
             img_fail += 1
 
-        print('-' * 50)
-
     connection.commit()
 
     msg = """Inserted: {}\n
@@ -84,5 +84,6 @@ if __name__ == '__main__':
         str(img_success), str(img_fail)
     )
 
-    send_email(msg)
+    logger.info(msg)
+    #send_email(msg)
 

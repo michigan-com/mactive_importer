@@ -5,17 +5,18 @@ import xml.etree.ElementTree as ET
 
 from .parse_html import parse_content
 from .obit import Obit
+from .log import logger
 
-def parse_obits(root, icons=[], date=None):
+def parse_obits(root, use_s3, icons=[] , date=None):
     run_date_el = root.find('run-date')
     run_date = run_date_el.text.strip()
-    print(run_date)
+    logger.info(run_date)
 
     pub_codes = run_date_el.findall('pub-code')
     for pub_code in pub_codes:
-        yield get_obit(pub_code, icons, date)
+        yield get_obit(pub_code, use_s3, icons, date)
 
-def get_obit(pub_code, icons=[], date=None):
+def get_obit(pub_code, use_s3, icons=[], date=None):
     """ Parse out an Obit given a <pub-code> XML element """
     ad_type_el = pub_code.find('ad-type')
 
@@ -49,7 +50,7 @@ def get_obit(pub_code, icons=[], date=None):
         final_images.append(image)
 
     images = sorted_nicely(final_images)
-    return Obit(first_name, last_name, ad_number, publication, text, images, siicode, date, subclass_code, use_s3=os.getenv('USE_S3', 0))
+    return Obit(first_name, last_name, ad_number, publication, text, images, siicode, date, subclass_code, use_s3=use_s3)
 
 def sorted_nicely(_list):
     """ Sort the given iterable in the way that humans expect."""
