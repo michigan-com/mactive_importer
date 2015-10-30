@@ -9,8 +9,8 @@ import pymysql
 
 from .parse_xml import parse_obits
 #from .send_email import send_email
-from .db import connect
-from .log import logger
+from ..db import connect
+from ..log import logger
 
 DEST_IMG_DIR = '/cust/docs/http-detroitnewspapers/mideathnotices/assets/images/dnimages'
 SRC_IMG_DIR = '/cust/scripts/death_notices/feeds'
@@ -24,7 +24,7 @@ parser.add_argument('--s3', dest='use_s3', help='Flag to attempt to upload to AW
 if __name__ == '__main__':
     icons = []
     #TODO: turn this into a db table
-    with open('dn_icons.txt', 'r') as fp:
+    with open(os.path.join(os.path.dirname(__file__), 'dn_icons.txt'), 'r') as fp:
         icons = fp.read().splitlines()
 
     connection = connect()

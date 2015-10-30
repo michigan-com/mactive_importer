@@ -3,7 +3,7 @@ import os
 from shutil import copy
 from datetime import date
 
-from .. import s3
+from ..s3 import *
 from ..log import logger
 
 class Obit(object):
