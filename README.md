@@ -11,6 +11,7 @@ Finally it copies all associated images into its respective directory under
 the mideathnotices app, usually:
     `<legacy_vm_ip>:/mnt/nfs/docs/http-detroitnewspapers/mideathnotices/assets/images/dnimages/<YEAR>/<MONTH>/`.
 
+If the `--s3` flag is set then it pipes all images to Amazon S3
 
 Setup
 -----
