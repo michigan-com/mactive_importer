@@ -10,7 +10,7 @@ def connect(db_name=None):
         host=os.getenv('DN_HOST', 'localhost'),
         user=os.getenv('DN_USER', ''),
         password=os.getenv('DN_PASS', ''),
-        db=os.getenv('DN_DB', db_name),
+        db=db_name,
         cursorclass=pymysql.cursors.DictCursor,
         charset='utf8'
     )
