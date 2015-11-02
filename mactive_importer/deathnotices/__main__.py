@@ -12,7 +12,7 @@ from .parse_xml import parse_obits
 from ..db import connect
 from ..log import logger
 
-DEST_IMG_DIR = '/cust/docs/http-detroitnewspapers/mideathnotices/assets/images/dnimages'
+DEST_IMG_DIR = 'mideathnotices/assets/images/dnimages'
 SRC_IMG_DIR = '/cust/scripts/death_notices/feeds'
 
 parser = ArgumentParser(description='Parse Mactive Deathnotice feeds')
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     with open(os.path.join(os.path.dirname(__file__), 'dn_icons.txt'), 'r') as fp:
         icons = fp.read().splitlines()
 
-    connection = connect()
+    connection = connect(db_name='dbdeath_notices')
 
     args = parser.parse_args()
     fname = args.fname

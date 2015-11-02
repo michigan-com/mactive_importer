@@ -3,7 +3,7 @@ import os
 import re
 import xml.etree.ElementTree as ET
 
-from .parse_html import parse_content
+from ..parse_html import parse_content
 from .obit import Obit
 from ..log import logger
 

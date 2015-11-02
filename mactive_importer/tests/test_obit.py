@@ -3,7 +3,7 @@ import unittest
 import os
 import shutil
 
-from ..obit import Obit
+from ..deathnotices.obit import Obit
 
 class TestObit(unittest.TestCase):
     def get_default_args(self):

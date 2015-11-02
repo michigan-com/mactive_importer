@@ -23,14 +23,14 @@ class CustomHTMLParser(HTMLParser):
     def handle_data(self, d):
         if d == '\n':
             return
-        if d.lower() == self.last_name.lower():
+        if self.last_name.lower() and d.lower() == self.last_name.lower():
             d = "{} ".format(d)
         self.fed.append(d)
 
     def get_data(self):
         return ''.join(self.fed), self.images
 
-def parse_content(html, first_name, last_name):
+def parse_content(html, first_name='', last_name=''):
     s = CustomHTMLParser(first_name, last_name)
     s.feed(html)
     return s.get_data()

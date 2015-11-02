@@ -6,7 +6,7 @@ from xml.etree.ElementTree import XML
 from datetime import date
 
 from ..parse_html import parse_content
-from ..parse_xml import parse_obits, sorted_nicely
+from ..deathnotices.parse_xml import parse_obits, sorted_nicely
 
 xml_feed_format = '''<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <web-export>
