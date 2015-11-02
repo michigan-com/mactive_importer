@@ -16,5 +16,3 @@ if _LOGGLY_KEY:
     _loggly_handler = logging.handlers.HTTPHandler("logs-01.loggly.com", _url, method="POST", secure=True)
     logger.addHandler(_loggly_handler)
 
-logger.info("THIS IS A TEST")
-logger.info("CMON BABY!")
