@@ -28,16 +28,6 @@ Restore copy, can use `schema.sql` if you want
 mysql -h localhost -u <user> -p death_notices < schema.sql
 ```
 
-Environment Variables
----------------------
-
-* DN\_HOST : mySQL IP, default: 'localhost'
-* DN\_DB : mySQL database name, default: 'death\_notices'
-* DN\_USER : mySQL user name, default: ''
-* DN\_PASS : mySQL user password, default: ''
-* AWS\_ACCESS\_KEY\_ID : AWS S3 access key
-* AWS\_SECRET\_ACCESS\_KEY : AWS Secret access key
-
 Run
 ---
 
