@@ -4,8 +4,9 @@ from xml.etree.ElementTree import XML
 from argparse import ArgumentParser
 from datetime import datetime
 
-from ..db import connect
 from .parse_classifieds import parse_classifieds, strip_invalid_stuff
+from ..db import connect
+from ..log import logger
 
 # 1) Parse and insert into classifieds_live (check for dupe)
 # - Get run date
@@ -69,6 +70,7 @@ ads = parse_classifieds(root, _date)
 inserted = 0
 updated = 0
 for ad in ads:
+    logger.info(ad)
     ad.save(connection)
 
     if ad.insert:
@@ -76,7 +78,7 @@ for ad in ads:
     elif ad.update:
         updated += 1
 
-print('''
+logger.info('''
 Processed Classifieds from {}
 
     Inserted: {}

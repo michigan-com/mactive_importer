@@ -35,6 +35,10 @@ class Classified():
         self.insert = False
         self.update = False
 
+    def __str__(self):
+        return '<Classified adnum:{}\nSubclassnum: {}\nDate Posted: {}>' \
+            .format(self.ad_number, self.sub_class_num, self.date_posted)
+
     @property
     def sql_params(self):
         return [
