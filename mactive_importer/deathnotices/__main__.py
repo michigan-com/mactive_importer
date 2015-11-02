@@ -27,7 +27,7 @@ if __name__ == '__main__':
     with open(os.path.join(os.path.dirname(__file__), 'dn_icons.txt'), 'r') as fp:
         icons = fp.read().splitlines()
 
-    connection = connect(db_name='dbdeath_notices')
+    connection = connect(db_name='death_notices')
 
     args = parser.parse_args()
     fname = args.fname
