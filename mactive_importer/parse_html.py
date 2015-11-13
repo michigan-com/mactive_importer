@@ -31,6 +31,8 @@ class CustomHTMLParser(HTMLParser):
         return ''.join(self.fed), self.images
 
 def parse_content(html, first_name='', last_name=''):
+    parser = HTMLParser()
+    html = parser.unescape(html)
     s = CustomHTMLParser(first_name, last_name)
     s.feed(html)
     return s.get_data()

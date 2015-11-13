@@ -24,7 +24,9 @@ def parse_ad(ad_element, date):
     end_date = datetime.strptime(end_date_el.text.strip(), '%m/%d/%Y').date()
 
     ad_content_el = ad_element.find('ad-content')
-    text_of_ad, images = parse_content(ad_content_el.text)
+    ad_content = "{} {} {}".format("<div>", ad_content_el.text.strip(), "</div>")
+
+    text_of_ad, images = parse_content(ad_content)
 
     logo_phone_number = ad_element.find('logo_phone_number')
     if logo_phone_number is not None:

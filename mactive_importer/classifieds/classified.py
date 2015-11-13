@@ -36,8 +36,8 @@ class Classified():
         self.update = False
 
     def __str__(self):
-        return '<Classified adnum:{}\nSubclassnum: {}\nDate Posted: {}>' \
-            .format(self.ad_number, self.sub_class_num, self.date_posted)
+        return '\n<Classified adnum:{}\nSubclassnum: {}\nDate Posted: {}\nText: {}>\n' \
+            .format(self.ad_number, self.sub_class_num, self.date_posted, self.text_of_ad)
 
     @property
     def sql_params(self):
