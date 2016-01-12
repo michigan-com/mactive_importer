@@ -3,8 +3,6 @@ import os
 import logging
 import logging.handlers
 
-#from loggly.handlers import HTTPSHandler
-
 _LOGGLY_KEY = os.getenv('LOGGLY', False)
 
 _fmt = "(%(name)s) %(filename)s:%(lineno)d: %(message)s"

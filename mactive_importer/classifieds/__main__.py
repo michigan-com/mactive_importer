@@ -85,6 +85,5 @@ Processed Classifieds from {}
     Updated: {}
 '''.format(_date, inserted, updated))
 
-
-
+connection.close()
 

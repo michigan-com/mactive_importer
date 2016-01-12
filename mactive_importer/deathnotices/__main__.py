@@ -85,5 +85,6 @@ if __name__ == '__main__':
     )
 
     logger.info(msg)
+    connection.close()
     #send_email(msg)
 
