@@ -48,7 +48,12 @@ if __name__ == '__main__':
     year = _date.year
     month = _date.month
 
-    dest_img_dir = "/".join([args.dest, str(year), str(month)])
+    if month < 10:
+        month = "0" + str(month)
+    else:
+        month = str(month)
+
+    dest_img_dir = "/".join([args.dest, str(year), month])
 
     #if not os.path.exists(dest_img_dir):
     #    os.makedirs(dest_img_dir)
